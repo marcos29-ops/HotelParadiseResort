@@ -1,0 +1,44 @@
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+/* Al imprimir una factura o un reporte se ocultan los elementos de navegación:
+   el papel solo debe contener el documento. */
+@media print {
+  header.MuiAppBar-root,
+  .MuiDrawer-root,
+  .MuiSnackbar-root {
+    display: none !important;
+  }
+
+  main {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .MuiCard-root {
+    break-inside: avoid;
+    box-shadow: none !important;
+  }
+}
+
+/* Respeta la preferencia del sistema de reducir el movimiento. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

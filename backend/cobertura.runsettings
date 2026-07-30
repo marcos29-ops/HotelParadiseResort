@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Configuración de la medición de cobertura.
+
+  Se excluyen las migraciones de EF Core porque son código generado por la herramienta
+  en tiempo de diseño (el snapshot del modelo son ~1830 líneas de declaraciones que
+  nunca se ejecutan en tiempo de ejecución). Incluirlas diluye la medición sin aportar
+  información: el esquema que producen sí está verificado, de forma efectiva, por las
+  109 pruebas de integración que corren contra la base de datos real que crean.
+
+  No se excluye CompilerGeneratedAttribute: eso descartaría las máquinas de estado de
+  los métodos async, que son el cuerpo real de casi todo el código de este proyecto y
+  elevaría la cifra artificialmente.
+-->
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat code coverage">
+        <Configuration>
+          <Format>cobertura</Format>
+          <ExcludeByFile>**/Migrations/*.cs</ExcludeByFile>
+          <SkipAutoProps>true</SkipAutoProps>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>
