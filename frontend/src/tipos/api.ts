@@ -121,6 +121,28 @@ export interface TipoHabitacion {
   cantidadHabitaciones: number;
 }
 
+export interface CrearHabitacion {
+  numero: string;
+  piso: number;
+  tipoHabitacionId: number;
+  observaciones?: string | null;
+}
+
+export interface ActualizarHabitacion extends CrearHabitacion {
+  activo: boolean;
+}
+
+export interface CrearTipoHabitacion {
+  nombre: string;
+  descripcion?: string | null;
+  tarifaBasePorNoche: number;
+  capacidadMaxima: number;
+}
+
+export interface ActualizarTipoHabitacion extends CrearTipoHabitacion {
+  activo: boolean;
+}
+
 export interface HabitacionDisponible {
   id: number;
   numero: string;

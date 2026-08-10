@@ -412,7 +412,8 @@ usuarios, seguridad. Defectos por severidad: Bloqueante/Mayor/Menor/Trivial.
 
 ## 8. Pantallas (Fase 3 — wireframes Etapa 2)
 
-Siete, con menú lateral y barra superior comunes. No inventar ni eliminar pantallas.
+Siete con wireframe, más **Habitaciones** (ver abajo). Menú lateral y barra superior comunes.
+No inventar ni eliminar pantallas más allá de la excepción documentada.
 
 1. **Login** — usuario, contraseña, recordarme, olvidó contraseña.
 2. **Panel principal** — 4 KPI (ocupadas `42/60`, disponibles, reservadas hoy, mantenimiento),
@@ -426,6 +427,20 @@ Siete, con menú lateral y barra superior comunes. No inventar ni eliminar panta
 6. **Reportes** — pestañas Ocupación/Ingresos/Temporadas, filtros, KPI, gráfico por semana,
    Exportar PDF.
 7. **Clientes** — tabla (ID, nombre, teléfono/correo, nº reservas), buscador, paginación.
+
+**8. Gestión de habitaciones** *(sin wireframe — añadida tras la Fase 4)*. Dos pestañas:
+inventario (número, piso, tipo, tarifa, estado, alta/edición y cambio de estado) y tipos con sus
+tarifas. **Por qué existe:** RF02 pide «catálogo, tipos, tarifas y estado en tiempo real», y el
+backend ya lo implementaba, pero ninguna de las siete pantallas lo exponía. El inicializador solo
+siembra el administrador, los tipos y los servicios: **no crea habitaciones**. Una instalación
+nueva se quedaba sin nada que reservar y solo podía cargarse por Swagger. No es una pantalla
+inventada: cierra un requerimiento del catálogo que estaba implementado pero inaccesible.
+Ver y cambiar estado corresponde a todo el personal; crear y editar solo a `Administrador`,
+igual que en `ControladorHabitaciones`.
+
+> Los desplegables de MUI dentro de formularios van con `Controller`, no con `register`: MUI monta
+> el `Select` sin valor y React Hook Form se lo asigna después, lo que dispara el aviso de React
+> «uncontrolled input to be controlled».
 
 **UX (Etapa 2):** consistencia · visibilidad del estado · prevención de errores ·
 retroalimentación inmediata · minimizar carga de memoria · jerarquía visual.

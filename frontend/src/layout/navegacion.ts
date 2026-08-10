@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
+import MeetingRoomOutlinedIcon from '@mui/icons-material/MeetingRoomOutlined';
 import EventAvailableOutlinedIcon from '@mui/icons-material/EventAvailableOutlined';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import RestaurantOutlinedIcon from '@mui/icons-material/RestaurantOutlined';
@@ -23,6 +24,7 @@ export interface ElementoNavegacion {
  */
 export const NAVEGACION: ElementoNavegacion[] = [
   { etiqueta: 'Panel principal', ruta: '/panel', icono: DashboardOutlinedIcon },
+  { etiqueta: 'Habitaciones', ruta: '/habitaciones', icono: MeetingRoomOutlinedIcon },
   { etiqueta: 'Reservas', ruta: '/reservas', icono: EventAvailableOutlinedIcon },
   { etiqueta: 'Check-in / Check-out', ruta: '/estadias', icono: LoginOutlinedIcon },
   { etiqueta: 'Consumos', ruta: '/consumos', icono: RestaurantOutlinedIcon },

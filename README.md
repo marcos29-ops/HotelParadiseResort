@@ -88,8 +88,9 @@ cobertura** · **54 endpoints REST** operativos · base de datos con 11 tablas, 
 foráneas y 12 restricciones CHECK · flujo completo verificado de extremo a extremo contra la base
 real.
 
-**Frontend:** las 7 pantallas implementadas y verificadas en navegador contra la API real ·
-0 errores de tipos · build de producción correcto · sin datos simulados.
+**Frontend:** las 7 pantallas del diseño más la de gestión de habitaciones, verificadas en
+navegador contra la API real · 0 errores de tipos · build de producción correcto · sin datos
+simulados.
 
 **Documentación:** manual técnico (21 págs.), manual de usuario con capturas reales (20 págs.) y
 plan de pruebas (8 págs.), los tres en PDF dentro de [`manuals/`](manuals/) · **27 de 27 casos de
@@ -119,6 +120,11 @@ Siete pantallas definidas por los wireframes oficiales de la Etapa 2:
 
 `Inicio de sesión` · `Panel principal` · `Nueva reserva` · `Check-in / Check-out` ·
 `Facturación` · `Reportes administrativos` · `Clientes`
+
+A ellas se suma **`Gestión de habitaciones`**, que no tiene wireframe pero sí requerimiento:
+RF02 exige el catálogo con sus tipos, tarifas y estado en tiempo real. El backend ya lo
+implementaba y ninguna pantalla lo exponía, de modo que una instalación nueva —que arranca sin
+habitaciones— no tenía nada que reservar y solo podía cargarse desde Swagger.
 
 ### Requerimientos no funcionales
 

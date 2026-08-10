@@ -10,6 +10,10 @@ import type {
   Estadia,
   Factura,
   GenerarFactura,
+  ActualizarHabitacion,
+  ActualizarTipoHabitacion,
+  CrearHabitacion,
+  CrearTipoHabitacion,
   Habitacion,
   HabitacionDisponible,
   HistorialCliente,
@@ -85,7 +89,19 @@ export const apiHabitaciones = {
       .patch<Habitacion>(`/habitaciones/${id}/estado`, { nuevoEstado })
       .then((r) => r.data),
 
+  crear: (datos: CrearHabitacion) =>
+    clienteHttp.post<Habitacion>('/habitaciones', datos).then((r) => r.data),
+
+  actualizar: (id: number, datos: ActualizarHabitacion) =>
+    clienteHttp.put<Habitacion>(`/habitaciones/${id}`, datos).then((r) => r.data),
+
   tipos: () => clienteHttp.get<TipoHabitacion[]>('/tipos-habitacion').then((r) => r.data),
+
+  crearTipo: (datos: CrearTipoHabitacion) =>
+    clienteHttp.post<TipoHabitacion>('/tipos-habitacion', datos).then((r) => r.data),
+
+  actualizarTipo: (id: number, datos: ActualizarTipoHabitacion) =>
+    clienteHttp.put<TipoHabitacion>(`/tipos-habitacion/${id}`, datos).then((r) => r.data),
 };
 
 export const apiReservas = {

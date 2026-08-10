@@ -5,6 +5,7 @@ import { useAutenticacion } from './contexto/ContextoAutenticacion';
 import { LayoutPrincipal } from './layout/LayoutPrincipal';
 import { PantallaLogin } from './pantallas/PantallaLogin';
 import { PantallaPanel } from './pantallas/PantallaPanel';
+import { PantallaHabitaciones } from './pantallas/PantallaHabitaciones';
 import { PantallaReservas } from './pantallas/PantallaReservas';
 import { PantallaNuevaReserva } from './pantallas/PantallaNuevaReserva';
 import { PantallaEstadias } from './pantallas/PantallaEstadias';
@@ -75,6 +76,7 @@ export function App() {
           }
         >
           <Route path="/panel" element={<PantallaPanel />} />
+          <Route path="/habitaciones" element={<PantallaHabitaciones />} />
           <Route path="/reservas" element={<PantallaReservas />} />
           <Route path="/reservas/nueva" element={<PantallaNuevaReserva />} />
           <Route path="/estadias" element={<PantallaEstadias />} />
