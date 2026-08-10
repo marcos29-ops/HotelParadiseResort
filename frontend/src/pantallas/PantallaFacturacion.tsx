@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   Alert,
   Box,
@@ -73,6 +73,43 @@ export function PantallaFacturacion() {
   const [justificacion, setJustificacion] = useState('');
   const [confirmarEmision, setConfirmarEmision] = useState(false);
 
+  /**
+   * Estadías con el check-out ya registrado y sin factura: son exactamente las que
+   * quedan pendientes de cobrar.
+   *
+   * Antes esta pantalla solo sabía llegar a una estadía por «/estadias/por-habitacion»,
+   * que devuelve únicamente las que están EnCurso. Tras el check-out la estadía pasa a
+   * Finalizada, de modo que el buscador daba 404 y no había forma de facturarla.
+   */
+  const consultaPendientes = useQuery({
+    queryKey: ['estadias-pendientes-factura'],
+    queryFn: () => apiEstadias.listar({ pagina: 1, tamanoPagina: 50, estado: 'Finalizada' }),
+  });
+
+  const pendientes = (consultaPendientes.data?.elementos ?? []).filter((e) => !e.tieneFactura);
+
+  const cargarEstadia = async (encontrada: Estadia) => {
+    setEstadia(encontrada);
+    setCuenta(await apiEstadias.cuenta(encontrada.id));
+
+    if (encontrada.tieneFactura) {
+      setFactura(await apiFacturacion.porEstadia(encontrada.id));
+    }
+  };
+
+  const seleccionarPendiente = async (pendiente: Estadia) => {
+    setMensajeBusqueda(null);
+    setFactura(null);
+    setCuenta(null);
+    setEstadia(null);
+
+    try {
+      await cargarEstadia(await apiEstadias.obtener(pendiente.id));
+    } catch (error) {
+      setMensajeBusqueda(describirError(error));
+    }
+  };
+
   const buscar = async () => {
     const valor = termino.trim();
     if (!valor) return;
@@ -84,23 +121,31 @@ export function PantallaFacturacion() {
     setEstadia(null);
 
     try {
-      const encontrada = await apiEstadias.buscarPorHabitacion(valor);
-      setEstadia(encontrada);
-      setCuenta(await apiEstadias.cuenta(encontrada.id));
-
-      if (encontrada.tieneFactura) {
-        setFactura(await apiFacturacion.porEstadia(encontrada.id));
-      }
+      await cargarEstadia(await apiEstadias.buscarPorHabitacion(valor));
     } catch {
-      // Sin estadía en curso: puede tratarse de una factura ya emitida.
+      // No hay estadía en curso en esa habitación. Puede ser una que ya hizo
+      // check-out y espera factura, o una factura ya emitida.
       try {
+        const criterio = valor.toLowerCase();
+        const pendiente = pendientes.find(
+          (e) =>
+            e.habitacionNumero.toLowerCase() === criterio ||
+            e.clienteIdentificacion.toLowerCase() === criterio ||
+            e.clienteNombre.toLowerCase().includes(criterio),
+        );
+
+        if (pendiente) {
+          await cargarEstadia(await apiEstadias.obtener(pendiente.id));
+          return;
+        }
+
         const listado = await apiFacturacion.listar({ busqueda: valor, tamanoPagina: 1 });
 
         if (listado.elementos.length > 0) {
           setFactura(await apiFacturacion.obtener(listado.elementos[0].id));
         } else {
           setMensajeBusqueda(
-            'No se encontró una estadía en curso ni una factura con ese dato. Registre el check-out antes de facturar.',
+            `No hay ninguna estadía ni factura que corresponda a «${valor}». Verifique el número de habitación, el comprobante o el cliente.`,
           );
         }
       } catch (error) {
@@ -125,6 +170,7 @@ export function PantallaFacturacion() {
       setConfirmarEmision(false);
       clienteConsultas.invalidateQueries({ queryKey: ['panel'] });
       clienteConsultas.invalidateQueries({ queryKey: ['facturas'] });
+      clienteConsultas.invalidateQueries({ queryKey: ['estadias-pendientes-factura'] });
       notificar.exito(
         `Factura ${emitida.numero} emitida por ${formatearValor(emitida.total, 'moneda')}.`,
       );
@@ -194,13 +240,84 @@ export function PantallaFacturacion() {
 
       {!estadia && !factura ? (
         <Card>
-          <CardContent>
-            <EstadoVacio
-              icono={<ReceiptLongIcon />}
-              titulo="Busque una estadía o factura"
-              descripcion="Indique el número de habitación para emitir la factura de un huésped, o el número de comprobante para reimprimir uno existente."
-            />
-          </CardContent>
+          {pendientes.length > 0 ? (
+            <>
+              <CardContent sx={{ pb: 1.5 }}>
+                <Typography variant="h4">Pendientes de facturar</Typography>
+                <Typography variant="caption">
+                  {pendientes.length} estadía(s) con el check-out registrado y sin comprobante
+                  emitido.
+                </Typography>
+              </CardContent>
+
+              <Divider />
+
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Habitación</TableCell>
+                      <TableCell>Huésped</TableCell>
+                      <TableCell align="center">Noches</TableCell>
+                      <TableCell align="right">Consumos</TableCell>
+                      <TableCell align="right">Acción</TableCell>
+                    </TableRow>
+                  </TableHead>
+
+                  <TableBody>
+                    {pendientes.map((pendiente) => (
+                      <TableRow key={pendiente.id} hover>
+                        <TableCell>
+                          <Typography variant="body2" fontWeight={600}>
+                            {pendiente.habitacionNumero}
+                          </Typography>
+                          <Typography variant="caption">{pendiente.tipoHabitacion}</Typography>
+                        </TableCell>
+
+                        <TableCell>
+                          <Typography variant="body2">{pendiente.clienteNombre}</Typography>
+                          <Typography variant="caption">
+                            {pendiente.clienteIdentificacion}
+                          </Typography>
+                        </TableCell>
+
+                        <TableCell align="center">
+                          <Typography variant="body2">{pendiente.noches}</Typography>
+                        </TableCell>
+
+                        <TableCell align="right">
+                          <Typography variant="body2">
+                            {formatearValor(pendiente.totalConsumos, 'moneda')}
+                          </Typography>
+                        </TableCell>
+
+                        <TableCell align="right">
+                          <Button
+                            size="small"
+                            variant="contained"
+                            startIcon={<ReceiptLongIcon />}
+                            onClick={() => seleccionarPendiente(pendiente)}
+                          >
+                            Facturar
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </>
+          ) : (
+            <CardContent>
+              <EstadoVacio
+                icono={<ReceiptLongIcon />}
+                titulo={
+                  consultaPendientes.isPending ? 'Cargando…' : 'No hay estadías pendientes de cobro'
+                }
+                descripcion="Cuando registre un check-out, la estadía aparecerá aquí lista para facturar. También puede buscar un comprobante ya emitido para reimprimirlo."
+              />
+            </CardContent>
+          )}
         </Card>
       ) : (
         <Grow in timeout={DURACION.pausada}>

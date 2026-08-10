@@ -112,6 +112,17 @@ export function PantallaNuevaReserva() {
   const cantidadHuespedes = watch('cantidadHuespedes');
   const habitacionId = watch('habitacionId');
 
+  // Los datos del cliente se rellenan con setValue, y MUI no se entera de que el
+  // campo dejó de estar vacío: la etiqueta se queda encima del valor y se lee
+  // encimada. Al observar el valor podemos subir la etiqueta nosotros. Con
+  // `undefined` se devuelve el control a MUI, que ya acierta al escribir a mano.
+  const nombre = watch('nombre');
+  const apellidos = watch('apellidos');
+  const telefono = watch('telefono');
+  const correo = watch('correo');
+
+  const etiquetaArriba = (valor?: string) => ({ shrink: Boolean(valor) || undefined });
+
   const consultaTipos = useQuery({
     queryKey: ['tipos-habitacion'],
     queryFn: apiHabitaciones.tipos,
@@ -277,6 +288,7 @@ export function PantallaNuevaReserva() {
                   disabled={Boolean(clienteEncontrado)}
                   error={Boolean(errors.nombre)}
                   helperText={errors.nombre?.message}
+                  InputLabelProps={etiquetaArriba(nombre)}
                   {...register('nombre', { required: 'El nombre es obligatorio.' })}
                 />
                 <TextField
@@ -285,6 +297,7 @@ export function PantallaNuevaReserva() {
                   disabled={Boolean(clienteEncontrado)}
                   error={Boolean(errors.apellidos)}
                   helperText={errors.apellidos?.message}
+                  InputLabelProps={etiquetaArriba(apellidos)}
                   {...register('apellidos', { required: 'Los apellidos son obligatorios.' })}
                 />
               </Stack>
@@ -294,6 +307,7 @@ export function PantallaNuevaReserva() {
                   label="Teléfono"
                   fullWidth
                   disabled={Boolean(clienteEncontrado)}
+                  InputLabelProps={etiquetaArriba(telefono)}
                   {...register('telefono')}
                 />
                 <TextField
@@ -303,6 +317,7 @@ export function PantallaNuevaReserva() {
                   disabled={Boolean(clienteEncontrado)}
                   error={Boolean(errors.correo)}
                   helperText={errors.correo?.message}
+                  InputLabelProps={etiquetaArriba(correo)}
                   {...register('correo', {
                     pattern: {
                       value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,

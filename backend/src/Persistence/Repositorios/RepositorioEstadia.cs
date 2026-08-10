@@ -51,12 +51,21 @@ public sealed class RepositorioEstadia : RepositorioBase<Estadia>, IRepositorioE
         TipoEstadoEstadia? estado = null,
         CancellationToken cancelacion = default)
     {
+        // Consumos y Factura entran en la proyección porque el DTO expone
+        // TotalConsumos y TieneFactura: sin ellos el listado devolvía siempre 0 y
+        // false, y la pantalla de facturación mostraba «$0.00» en estadías que sí
+        // tenían consumos. Se usa consulta dividida para que la paginación no
+        // multiplique filas al unir la colección de consumos.
         var consulta = Conjunto
             .AsNoTracking()
             .Include(e => e.Reserva)
                 .ThenInclude(r => r!.Cliente)
             .Include(e => e.Habitacion)
                 .ThenInclude(h => h!.TipoHabitacion)
+            .Include(e => e.Consumos)
+                .ThenInclude(c => c.ServicioAdicional)
+            .Include(e => e.Factura)
+            .AsSplitQuery()
             .AsQueryable();
 
         if (estado.HasValue)

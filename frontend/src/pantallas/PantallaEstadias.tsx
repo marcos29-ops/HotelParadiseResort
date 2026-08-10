@@ -134,6 +134,9 @@ export function PantallaEstadias() {
     clienteConsultas.invalidateQueries({ queryKey: ['habitaciones'] });
     clienteConsultas.invalidateQueries({ queryKey: ['reservas'] });
     clienteConsultas.invalidateQueries({ queryKey: ['estadias'] });
+    // Tras el check-out la estadía queda pendiente de cobro: la pantalla de
+    // facturación debe listarla sin que haga falta recargar.
+    clienteConsultas.invalidateQueries({ queryKey: ['estadias-pendientes-factura'] });
   };
 
   const mutacionCheckIn = useMutation({
