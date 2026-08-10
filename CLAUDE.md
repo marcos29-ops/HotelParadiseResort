@@ -438,9 +438,27 @@ inventada: cierra un requerimiento del catálogo que estaba implementado pero in
 Ver y cambiar estado corresponde a todo el personal; crear y editar solo a `Administrador`,
 igual que en `ControladorHabitaciones`.
 
+**9. Usuarios** *(sin wireframe — añadida tras la Fase 4, solo `Administrador`)*. Listado
+paginado, alta, edición, restablecimiento de contraseña y desactivación. **Por qué existe:** la
+regla de negocio 8 reserva la gestión de usuarios al administrador, `ControladorUsuarios` expone
+6 endpoints y **ninguna pantalla los consumía**. Las cuentas del personal solo podían crearse por
+Swagger, y el aviso del login —«solicite el restablecimiento al administrador»— remitía a una
+operación que la interfaz no ofrecía. No se puede desactivar la propia cuenta.
+
+Se conectó además **«Cambiar contraseña»** al menú de la cuenta
+(`componentes/DialogoCambiarContrasena`): `apiAutenticacion.cambiarContrasena` existía desde la
+Fase 2 y ninguna pantalla lo invocaba — era código muerto.
+
+> Único endpoint sin interfaz: `GET /autenticacion/perfil`. No es un hueco — los datos del usuario
+> llegan en la respuesta del inicio de sesión y viven en `ContextoAutenticacion`.
+
 > Los desplegables de MUI dentro de formularios van con `Controller`, no con `register`: MUI monta
 > el `Select` sin valor y React Hook Form se lo asigna después, lo que dispara el aviso de React
 > «uncontrolled input to be controlled».
+
+> **El inicializador no siembra `recepcion01`.** Solo crea el `admin` (con `Seed:AdminPassword`),
+> los tipos de habitación y los servicios adicionales. Una instalación nueva no tiene habitaciones
+> ni clientes ni reservas: hay que cargarlas desde las pantallas de Habitaciones y Usuarios.
 
 **UX (Etapa 2):** consistencia · visibilidad del estado · prevención de errores ·
 retroalimentación inmediata · minimizar carga de memoria · jerarquía visual.

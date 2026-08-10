@@ -12,8 +12,11 @@ import type {
   GenerarFactura,
   ActualizarHabitacion,
   ActualizarTipoHabitacion,
+  ActualizarUsuario,
   CrearHabitacion,
   CrearTipoHabitacion,
+  CrearUsuario,
+  Usuario,
   Habitacion,
   HabitacionDisponible,
   HistorialCliente,
@@ -46,6 +49,30 @@ export const apiAutenticacion = {
     clienteHttp
       .post('/autenticacion/cambiar-contrasena', { contrasenaActual, contrasenaNueva })
       .then(() => undefined),
+};
+
+/**
+ * Gestión de usuarios del sistema. Reservada al Administrador, conforme a la
+ * regla de negocio 8 y al [Authorize] del controlador.
+ */
+export const apiUsuarios = {
+  listar: (parametros: ParametrosPaginacion) =>
+    clienteHttp
+      .get<ResultadoPaginado<Usuario>>('/usuarios', { params: parametros })
+      .then((r) => r.data),
+
+  crear: (datos: CrearUsuario) =>
+    clienteHttp.post<Usuario>('/usuarios', datos).then((r) => r.data),
+
+  actualizar: (id: number, datos: ActualizarUsuario) =>
+    clienteHttp.put<Usuario>(`/usuarios/${id}`, datos).then((r) => r.data),
+
+  restablecerContrasena: (id: number, contrasenaNueva: string) =>
+    clienteHttp
+      .post(`/usuarios/${id}/restablecer-contrasena`, { contrasenaNueva })
+      .then(() => undefined),
+
+  desactivar: (id: number) => clienteHttp.delete(`/usuarios/${id}`).then(() => undefined),
 };
 
 export const apiClientes = {

@@ -41,6 +41,32 @@ export interface UsuarioAutenticado {
 
 export type RolUsuario = 'Administrador' | 'Recepcionista';
 
+export interface Usuario {
+  id: number;
+  nombre: string;
+  nombreUsuario: string;
+  correo: string;
+  rol: RolUsuario;
+  activo: boolean;
+  ultimoAcceso?: string | null;
+  fechaCreacion: string;
+}
+
+export interface CrearUsuario {
+  nombre: string;
+  nombreUsuario: string;
+  correo: string;
+  contrasena: string;
+  rol: RolUsuario;
+}
+
+export interface ActualizarUsuario {
+  nombre: string;
+  correo: string;
+  rol: RolUsuario;
+  activo: boolean;
+}
+
 export interface RespuestaInicioSesion {
   token: string;
   expiracion: string;

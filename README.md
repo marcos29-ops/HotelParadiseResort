@@ -88,7 +88,7 @@ cobertura** · **54 endpoints REST** operativos · base de datos con 11 tablas, 
 foráneas y 12 restricciones CHECK · flujo completo verificado de extremo a extremo contra la base
 real.
 
-**Frontend:** las 7 pantallas del diseño más la de gestión de habitaciones, verificadas en
+**Frontend:** las 7 pantallas del diseño más las de habitaciones y usuarios, verificadas en
 navegador contra la API real · 0 errores de tipos · build de producción correcto · sin datos
 simulados.
 
@@ -121,10 +121,19 @@ Siete pantallas definidas por los wireframes oficiales de la Etapa 2:
 `Inicio de sesión` · `Panel principal` · `Nueva reserva` · `Check-in / Check-out` ·
 `Facturación` · `Reportes administrativos` · `Clientes`
 
-A ellas se suma **`Gestión de habitaciones`**, que no tiene wireframe pero sí requerimiento:
-RF02 exige el catálogo con sus tipos, tarifas y estado en tiempo real. El backend ya lo
-implementaba y ninguna pantalla lo exponía, de modo que una instalación nueva —que arranca sin
-habitaciones— no tenía nada que reservar y solo podía cargarse desde Swagger.
+A ellas se suman dos pantallas sin wireframe pero con requerimiento explícito, que el backend ya
+implementaba y ninguna interfaz exponía:
+
+- **`Gestión de habitaciones`** — RF02 exige el catálogo con sus tipos, tarifas y estado en tiempo
+  real. Una instalación nueva arranca sin habitaciones, de modo que no había nada que reservar y
+  el inventario solo podía cargarse desde Swagger.
+- **`Usuarios`** *(solo Administrador)* — la regla de negocio 8 le reserva la gestión de cuentas.
+  Sin esta pantalla el personal solo podía darse de alta por Swagger, y el aviso del inicio de
+  sesión remitía a un restablecimiento de contraseña que el administrador no podía ejecutar.
+
+> Al clonar el repositorio, la base arranca únicamente con la cuenta `admin`, los tipos de
+> habitación y los servicios adicionales. **No trae habitaciones, clientes ni reservas**: se
+> cargan desde las pantallas correspondientes.
 
 ### Requerimientos no funcionales
 

@@ -24,12 +24,14 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
+import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import LogoutIcon from '@mui/icons-material/Logout';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HotelIcon from '@mui/icons-material/Hotel';
 import { useAutenticacion } from '../contexto/ContextoAutenticacion';
+import { DialogoCambiarContrasena } from '../componentes/DialogoCambiarContrasena';
 import { AZUL_PROFUNDO, CURVA, CURVA_ENTRADA, DURACION, SOMBRA } from '../tema/tema';
 import { NAVEGACION, construirMigas, obtenerTitulo } from './navegacion';
 
@@ -51,6 +53,7 @@ export function LayoutPrincipal() {
   const { usuario, cerrarSesion } = useAutenticacion();
 
   const [menuAbierto, setMenuAbierto] = useState(true);
+  const [dialogoContrasena, setDialogoContrasena] = useState(false);
   const [cajonMovil, setCajonMovil] = useState(false);
   const [anclaPerfil, setAnclaPerfil] = useState<HTMLElement | null>(null);
 
@@ -324,9 +327,22 @@ export function LayoutPrincipal() {
             <MenuItem
               onClick={() => {
                 setAnclaPerfil(null);
+                setDialogoContrasena(true);
+              }}
+              sx={{ mt: 0.5 }}
+            >
+              <ListItemIcon>
+                <KeyOutlinedIcon fontSize="small" />
+              </ListItemIcon>
+              Cambiar contraseña
+            </MenuItem>
+
+            <MenuItem
+              onClick={() => {
+                setAnclaPerfil(null);
                 cerrarSesion();
               }}
-              sx={{ mt: 0.5, color: 'error.main' }}
+              sx={{ color: 'error.main' }}
             >
               <ListItemIcon sx={{ color: 'error.main' }}>
                 <LogoutIcon fontSize="small" />
@@ -334,6 +350,11 @@ export function LayoutPrincipal() {
               Cerrar sesión
             </MenuItem>
           </Menu>
+
+          <DialogoCambiarContrasena
+            abierto={dialogoContrasena}
+            onCerrar={() => setDialogoContrasena(false)}
+          />
         </Toolbar>
       </AppBar>
 

@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import MeetingRoomOutlinedIcon from '@mui/icons-material/MeetingRoomOutlined';
+import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import EventAvailableOutlinedIcon from '@mui/icons-material/EventAvailableOutlined';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import RestaurantOutlinedIcon from '@mui/icons-material/RestaurantOutlined';
@@ -36,6 +37,12 @@ export const NAVEGACION: ElementoNavegacion[] = [
     roles: ['Administrador'],
   },
   { etiqueta: 'Clientes', ruta: '/clientes', icono: PeopleAltOutlinedIcon },
+  {
+    etiqueta: 'Usuarios',
+    ruta: '/usuarios',
+    icono: ManageAccountsOutlinedIcon,
+    roles: ['Administrador'],
+  },
 ];
 
 /** Títulos de rutas que no figuran en el menú lateral. */

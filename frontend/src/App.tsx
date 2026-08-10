@@ -6,6 +6,7 @@ import { LayoutPrincipal } from './layout/LayoutPrincipal';
 import { PantallaLogin } from './pantallas/PantallaLogin';
 import { PantallaPanel } from './pantallas/PantallaPanel';
 import { PantallaHabitaciones } from './pantallas/PantallaHabitaciones';
+import { PantallaUsuarios } from './pantallas/PantallaUsuarios';
 import { PantallaReservas } from './pantallas/PantallaReservas';
 import { PantallaNuevaReserva } from './pantallas/PantallaNuevaReserva';
 import { PantallaEstadias } from './pantallas/PantallaEstadias';
@@ -91,6 +92,14 @@ export function App() {
             }
           />
           <Route path="/clientes" element={<PantallaClientes />} />
+          <Route
+            path="/usuarios"
+            element={
+              <RutaProtegida roles={['Administrador']}>
+                <PantallaUsuarios />
+              </RutaProtegida>
+            }
+          />
           <Route path="*" element={<NoEncontrado />} />
         </Route>
 
