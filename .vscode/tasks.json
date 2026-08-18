@@ -1,0 +1,52 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // Levanta Docker Desktop si hace falta y arranca el contenedor de SQL.
+      // Sin base de datos la API no puede iniciar.
+      "label": "base-de-datos",
+      "type": "shell",
+      "command": "docker info >/dev/null 2>&1 || open -a Docker; for i in $(seq 1 40); do docker info >/dev/null 2>&1 && break; sleep 2; done; docker start azure-sql-edge",
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "shared" }
+    },
+    {
+      "label": "compilar-backend",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}/backend/src/API/HotelParadiseResort.API.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "dependsOn": "base-de-datos",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      // Vite queda corriendo, así que se declara como tarea en segundo plano.
+      // El patrón detecta el "ready in ..." con que Vite avisa que ya sirve.
+      "label": "frontend-dev",
+      "type": "shell",
+      "command": "npm run dev --prefix frontend",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": { "regexp": "^$" },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*VITE.*",
+          "endsPattern": ".*(ready in|Local:).*"
+        }
+      },
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "pruebas",
+      "type": "shell",
+      "command": "dotnet test ${workspaceFolder}/backend/HotelParadiseResort.sln --settings ${workspaceFolder}/backend/cobertura.runsettings",
+      "dependsOn": "base-de-datos",
+      "problemMatcher": "$msCompile",
+      "group": "test"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "API (backend)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "compilar-backend",
+      "program": "${workspaceFolder}/backend/src/API/bin/Debug/net8.0/HotelParadiseResort.API.dll",
+      "cwd": "${workspaceFolder}/backend/src/API",
+      "stopAtEntry": false,
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+        "uriFormat": "%s/swagger"
+      },
+      "env": { "ASPNETCORE_ENVIRONMENT": "Development" },
+      "sourceFileMap": { "/Views": "${workspaceFolder}/Views" }
+    },
+    {
+      "name": "Web (frontend)",
+      "type": "chrome",
+      "request": "launch",
+      "preLaunchTask": "frontend-dev",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/frontend/src"
+    }
+  ],
+  "compounds": [
+    {
+      // Esta es la que hay que elegir para levantar el sistema completo.
+      "name": "Paradise Resort (todo)",
+      "configurations": ["API (backend)", "Web (frontend)"],
+      "stopAll": true
+    }
+  ]
+}

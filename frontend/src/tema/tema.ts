@@ -4,21 +4,24 @@ import type { EstadoHabitacion } from '../tipos/api';
 /**
  * Identidad visual del sistema.
  *
- * La paleta se apoya en un azul corporativo sobrio y una escala de grises fríos.
+ * La paleta se apoya en un rojo vino corporativo y una escala de grises neutros.
  * El color se reserva para comunicar significado —el estado de una habitación, el
  * resultado de una acción—, nunca como adorno: es lo que mantiene la interfaz
  * despejada pese a la densidad de información que maneja recepción.
  */
 
-const AZUL_PRINCIPAL = '#1B4965';
-const AZUL_CLARO = '#2C6E91';
+const ROJO_PRINCIPAL = '#8E1F2F';
+const ROJO_CLARO = '#B3343F';
 const NEUTRO_FONDO = '#F5F7F9';
 const NEUTRO_SUPERFICIE = '#FFFFFF';
 const TEXTO_PRINCIPAL = '#16202A';
 const TEXTO_SECUNDARIO = '#5A6774';
 
-/** Fondo del menú lateral: azul profundo que enmarca el área de trabajo clara. */
-export const AZUL_PROFUNDO = '#122F42';
+/** Fondo del menú lateral: vino profundo que enmarca el área de trabajo clara. */
+export const VINO_PROFUNDO = '#3E1016';
+
+/** Azul reservado a los avisos informativos: el rojo ya identifica a la marca. */
+const AZUL_INFO = '#2C6E91';
 
 /** Duraciones compartidas: mantienen coherente el ritmo de toda la interfaz. */
 export const DURACION = {
@@ -91,9 +94,9 @@ export const tema = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: AZUL_PRINCIPAL,
-      light: AZUL_CLARO,
-      dark: '#12354A',
+      main: ROJO_PRINCIPAL,
+      light: ROJO_CLARO,
+      dark: '#6B1624',
       contrastText: '#FFFFFF',
     },
     secondary: {
@@ -103,7 +106,7 @@ export const tema = createTheme({
     success: { main: '#2E7D57' },
     warning: { main: '#B4820A' },
     error: { main: '#C0392B' },
-    info: { main: AZUL_CLARO },
+    info: { main: AZUL_INFO },
     background: {
       default: NEUTRO_FONDO,
       paper: NEUTRO_SUPERFICIE,
@@ -157,7 +160,7 @@ export const tema = createTheme({
         // Desplazamiento suave al navegar por anclas y foco visible para teclado.
         html: { scrollBehavior: 'smooth' },
         '*:focus-visible': {
-          outline: `2px solid ${AZUL_CLARO}`,
+          outline: `2px solid ${ROJO_CLARO}`,
           outlineOffset: 2,
         },
         // Barra de desplazamiento discreta, coherente con la paleta.
@@ -203,11 +206,11 @@ export const tema = createTheme({
           '&:active': { transform: 'scale(0.97)' },
         },
         containedPrimary: {
-          background: `linear-gradient(180deg, ${AZUL_CLARO} 0%, ${AZUL_PRINCIPAL} 100%)`,
-          boxShadow: `0 1px 2px ${alpha(AZUL_PRINCIPAL, 0.28)}`,
+          background: `linear-gradient(180deg, ${ROJO_CLARO} 0%, ${ROJO_PRINCIPAL} 100%)`,
+          boxShadow: `0 1px 2px ${alpha(ROJO_PRINCIPAL, 0.28)}`,
           '&:hover': {
-            background: `linear-gradient(180deg, ${AZUL_CLARO} 0%, ${AZUL_PRINCIPAL} 90%)`,
-            boxShadow: `0 4px 14px ${alpha(AZUL_PRINCIPAL, 0.34)}`,
+            background: `linear-gradient(180deg, ${ROJO_CLARO} 0%, ${ROJO_PRINCIPAL} 90%)`,
+            boxShadow: `0 4px 14px ${alpha(ROJO_PRINCIPAL, 0.34)}`,
             transform: 'translateY(-1px)',
           },
           // Sin esto el degradado persiste al deshabilitar el botón y el texto
@@ -220,7 +223,7 @@ export const tema = createTheme({
         },
         outlined: {
           borderColor: '#D6DCE2',
-          '&:hover': { borderColor: AZUL_CLARO, backgroundColor: alpha(AZUL_CLARO, 0.05) },
+          '&:hover': { borderColor: ROJO_CLARO, backgroundColor: alpha(ROJO_CLARO, 0.05) },
         },
       },
     },
@@ -250,7 +253,7 @@ export const tema = createTheme({
       styleOverrides: {
         root: {
           transition: `box-shadow ${DURACION.rapida}ms ${CURVA}`,
-          '&.Mui-focused': { boxShadow: `0 0 0 3px ${alpha(AZUL_CLARO, 0.14)}` },
+          '&.Mui-focused': { boxShadow: `0 0 0 3px ${alpha(ROJO_CLARO, 0.14)}` },
         },
       },
     },
@@ -279,8 +282,8 @@ export const tema = createTheme({
           // Marca lateral al pasar el cursor: guía la lectura de la fila sin
           // recurrir a un fondo de color saturado.
           '&.MuiTableRow-hover:hover': {
-            backgroundColor: alpha(AZUL_CLARO, 0.035),
-            boxShadow: `inset 3px 0 0 ${alpha(AZUL_CLARO, 0.55)}`,
+            backgroundColor: alpha(ROJO_CLARO, 0.035),
+            boxShadow: `inset 3px 0 0 ${alpha(ROJO_CLARO, 0.55)}`,
           },
         },
       },
@@ -293,7 +296,7 @@ export const tema = createTheme({
           fontWeight: 600,
           minHeight: 48,
           transition: `color ${DURACION.rapida}ms ${CURVA}, background-color ${DURACION.rapida}ms ${CURVA}`,
-          '&:hover': { backgroundColor: alpha(AZUL_CLARO, 0.04) },
+          '&:hover': { backgroundColor: alpha(ROJO_CLARO, 0.04) },
         },
       },
     },

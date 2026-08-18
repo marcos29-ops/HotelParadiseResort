@@ -36,6 +36,10 @@ project.fragment.lock.json
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json.example
+# La configuración de ejecución sí se versiona: define cómo se levanta el
+# proyecto y debe ser igual para todo el equipo.
+!.vscode/launch.json
+!.vscode/tasks.json
 
 # Resultados de pruebas y cobertura
 [Tt]est[Rr]esult*/

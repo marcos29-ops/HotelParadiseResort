@@ -32,7 +32,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HotelIcon from '@mui/icons-material/Hotel';
 import { useAutenticacion } from '../contexto/ContextoAutenticacion';
 import { DialogoCambiarContrasena } from '../componentes/DialogoCambiarContrasena';
-import { AZUL_PROFUNDO, CURVA, CURVA_ENTRADA, DURACION, SOMBRA } from '../tema/tema';
+import { VINO_PROFUNDO, CURVA, CURVA_ENTRADA, DURACION, SOMBRA } from '../tema/tema';
 import { NAVEGACION, construirMigas, obtenerTitulo } from './navegacion';
 
 const ANCHO_MENU = 248;
@@ -155,8 +155,8 @@ export function LayoutPrincipal() {
                     insetBlock: 9,
                     width: 3,
                     borderRadius: 3,
-                    backgroundColor: '#6FB3D2',
-                    boxShadow: '0 0 10px rgba(111,179,210,0.7)',
+                    backgroundColor: '#F2A0A6',
+                    boxShadow: '0 0 10px rgba(242,160,166,0.7)',
                   },
                 },
               }}
@@ -375,7 +375,7 @@ export function LayoutPrincipal() {
             flexDirection: 'column',
             overflowX: 'hidden',
             // Degradado sutil de arriba abajo: da profundidad al panel sin ruido.
-            background: `linear-gradient(180deg, ${AZUL_PROFUNDO} 0%, #0E2634 100%)`,
+            background: `linear-gradient(180deg, ${VINO_PROFUNDO} 0%, #2A0A0E 100%)`,
             transition: `width ${DURACION.normal}ms ${CURVA}`,
           },
         }}
